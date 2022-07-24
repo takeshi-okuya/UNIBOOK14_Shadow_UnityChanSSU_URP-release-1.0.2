@@ -13,12 +13,14 @@ public class CustomShadowMapRenderer : MonoBehaviour
     public Transform center;
 
     public Renderer[] casters;
+    public Renderer[] receivers;
 
     public Vector3 range = Vector3.one;
     public Vector2Int resolution = new Vector2Int(1024, 1024);
 
     RenderTexture shadowMap;
     Matrix4x4 view, proj;
+    MaterialPropertyBlock propertyBlock;
 
     void LateUpdate()
     {
@@ -44,6 +46,19 @@ public class CustomShadowMapRenderer : MonoBehaviour
         proj = Matrix4x4.Ortho(-range.x * 0.5f, range.x * 0.5f,
                                -range.y * 0.5f, range.y * 0.5f,
                                0, range.z);
+
+        if (propertyBlock == null) { propertyBlock = new MaterialPropertyBlock(); }
+        propertyBlock.SetInt("_CustomShadowEnable", 1);
+        propertyBlock.SetTexture("_CustomShadowMap", shadowMap);
+        propertyBlock.SetMatrix("_CustomShadowMap_View", view);
+        var gpuProj = GL.GetGPUProjectionMatrix(proj, true);
+        propertyBlock.SetMatrix("_CustomShadowMap_Proj", gpuProj);
+
+        foreach (var renderer in receivers)
+        {
+            if (renderer == null) { continue; }
+            renderer.SetPropertyBlock(propertyBlock);
+        }
     }
 
     void OnEnable()

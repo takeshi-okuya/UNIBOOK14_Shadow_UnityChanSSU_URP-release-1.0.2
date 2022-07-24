@@ -2,6 +2,7 @@
 //nobuyuki@unity3d.com
 //toshiyuki@unity3d.com (Universal RP/HDRP) 
 
+#include "Assets/UNIBOOK14/CustomShadowMap.hlsl"
 
 
         float4 fragShadingGradeMap(VertexOutput i, fixed facing : VFACE) : SV_TARGET
@@ -75,6 +76,7 @@
                 envColor *= 1.8f;
 
                 UtsLight mainLight = GetMainUtsLightByID(i.mainLightID, i.posWorld.xyz, inputData.shadowCoord, i.positionCS);
+                mainLight.shadowAttenuation = checkCustomShadow(i.posWorld.xyz, mainLight.shadowAttenuation);
                 half3 mainLightColor = GetLightColor(mainLight);
 
 
@@ -129,6 +131,7 @@
                 float4 _1st_ShadeMap_var = lerp(SAMPLE_TEXTURE2D(_1st_ShadeMap,sampler_MainTex, TRANSFORM_TEX(Set_UV0, _1st_ShadeMap)),_MainTex_var,_Use_BaseAs1st);
                 float3 _Is_LightColor_1st_Shade_var = lerp( (_1st_ShadeMap_var.rgb*_1st_ShadeColor.rgb), ((_1st_ShadeMap_var.rgb*_1st_ShadeColor.rgb)*Set_LightColor), _Is_LightColor_1st_Shade );
                 float _HalfLambert_var = 0.5*dot(lerp( i.normalDir, normalDirection, _Is_NormalMapToBase ),lightDirection)+0.5; // Half Lambert
+                _HalfLambert_var = 1.0;
 
                 //v.2.0.6
                 float4 _ShadingGradeMap_var = tex2Dlod(_ShadingGradeMap, float4(TRANSFORM_TEX(Set_UV0, _ShadingGradeMap), 0.0, _BlurLevelSGM));
