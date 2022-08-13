@@ -2,6 +2,7 @@ bool _CustomShadowEnable = false;
 Texture2D _CustomShadowMap;
 float4x4 _CustomShadowMap_View;
 float4x4 _CustomShadowMap_Proj;
+float _CustomShadow_Bias;
 
 SamplerState my_point_clamp_sampler;
 
@@ -21,6 +22,6 @@ float checkCustomShadow(float3 positionWS, float originalShadowAttenuation)
 	float shadowMapDepth = _CustomShadowMap.Sample(my_point_clamp_sampler, uv).x;
 	float surfaceDepth = -positionVS_S.z;
 
-	if (shadowMapDepth < surfaceDepth) { return 0; }
+	if (shadowMapDepth + _CustomShadow_Bias < surfaceDepth) { return 0; }
 	else { return 1; }
 }

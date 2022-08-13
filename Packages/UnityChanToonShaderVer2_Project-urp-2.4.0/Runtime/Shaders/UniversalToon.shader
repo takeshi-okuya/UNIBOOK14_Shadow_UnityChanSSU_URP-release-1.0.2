@@ -7,6 +7,9 @@
 
 Shader "Universal Render Pipeline/Toon" {
     Properties{
+        //Custom Shadow
+        _CustomShadow_Bias("CustomShadow_Bias", Range(0.0, 0.01)) = 0.002
+
         [HideInInspector] _simpleUI("SimpleUI", Int) = 0
         // Versioning of material to help for upgrading
         [HideInInspector] _utsVersionX("VersionX", Float) = 2

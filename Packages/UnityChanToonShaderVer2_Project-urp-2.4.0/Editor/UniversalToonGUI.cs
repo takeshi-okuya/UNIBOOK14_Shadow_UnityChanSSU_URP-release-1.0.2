@@ -217,6 +217,7 @@ namespace UnityEditor.Rendering.Universal.Toon.ShaderGUI
         // -----------------------------------------------------
         //m_MaterialEditorのメソッドをUIとして使うもののみを指定する.
         // UTS2 materal properties -------------------------
+        MaterialProperty customShadow_Bias = null;
         MaterialProperty utsTechnique = null;
         MaterialProperty transparentMode = null;
         MaterialProperty clippingMode = null;
@@ -376,6 +377,7 @@ namespace UnityEditor.Rendering.Universal.Toon.ShaderGUI
         public void FindProperties(MaterialProperty[] props)
         {
             //シェーダーによって無い可能性があるプロパティはfalseを追加.
+            customShadow_Bias = FindProperty("_CustomShadow_Bias", props);
             utsTechnique = FindProperty(ShaderPropUtsTechniqe, props);
             transparentMode = FindProperty(ShaderPropTransparentEnabled, props);
             clippingMask = FindProperty(ShaderPropClippingMask, props);
@@ -610,6 +612,12 @@ namespace UnityEditor.Rendering.Universal.Toon.ShaderGUI
             EditorGUI.BeginChangeCheck();
 
             EditorGUILayout.Space();
+
+            GUILayout.Label("Custom Shadow", EditorStyles.boldLabel);
+            m_MaterialEditor.ShaderProperty(customShadow_Bias, "CustomShadow_Bias");
+            EditorGUILayout.Space();
+
+            GUILayout.Label("UTS", EditorStyles.boldLabel);
 
             // select UTS technique here.
             DoPopup(workflowModeText, utsTechnique, System.Enum.GetNames(typeof(_UTS_Technique)));

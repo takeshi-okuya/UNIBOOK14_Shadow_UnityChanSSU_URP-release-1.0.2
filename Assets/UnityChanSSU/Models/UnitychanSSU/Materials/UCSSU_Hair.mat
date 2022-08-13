@@ -171,6 +171,7 @@ Material:
     - _ColorShift_Speed: 0
     - _Cull: 2
     - _CullMode: 2
+    - _CustomShadow_Bias: 0.002
     - _Cutoff: 0.5
     - _DstBlend: 0
     - _EMISSIVE: 0
